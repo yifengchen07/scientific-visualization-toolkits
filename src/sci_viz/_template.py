@@ -2,10 +2,10 @@
 新增一种图的模板（复制本文件内容到对应类别的模块里改，不要直接 import 本文件）。
 
 四步走：
-  1. 在 plots/ 下合适的模块（relation / matrix / compare / composition / distribution）里写函数，
-     或者新建一个模块，如 plots/timeseries.py
-  2. 配色走 palettes.get_palette / get_cmap 即可自动跟随主题（离散色用主题 cat，连续色用 seq）；默认角色分配见 palettes._theme_palette_spec
-  3. 在 plots/__init__.py 里 import 并写进 __all__
+  1. 在 sci_viz/ 下合适的模块（relation / matrix / compare / composition / distribution）里写函数，
+     或者新建一个模块，如 sci_viz/timeseries.py
+  2. 配色走 palettes.get_palette / get_cmap 即可自动跟随主题（离散色用主题 cat，连续色用 seq）；默认角色分配见 src/sci_viz/utils/palettes.py 的 _theme_palette_spec
+  3. 在 sci_viz/__init__.py 里 import 并写进 __all__
   4. 在 examples/gallery.py 里加一个 demo_xxx 并登记到 GALLERY（它同时就是冒烟测试）
 
 函数约定：
@@ -17,8 +17,8 @@
 """
 import numpy as np
 
-from utils import pubstyle as ps
-from utils import palettes
+from .utils import pubstyle as ps
+from .utils import palettes
 from ._common import get_ax, set_labels, groups_from
 
 

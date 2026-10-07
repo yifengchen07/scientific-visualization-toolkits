@@ -3,7 +3,7 @@
 一行调用画出论文级图表：英文/数字 Times New Roman，中文 SimSun，公式 LaTeX 字体；配色可自定义；以后加新图只需要写一个函数。
 
 ```python
-import plots as pl
+import sci_viz as pl
 
 pl.bar({"Control": a, "Treat A": b, "Treat B": c}, ylabel="Measured Value (Units)")
 pl.regression(x, y, title="Group A")
@@ -11,31 +11,52 @@ pl.corr_heatmap(df)
 pl.save(fig_or_ax, "figures/fig1")        # 同时存 png + pdf
 ```
 
+## 安装（装进 Python 环境，所有项目都能 import）
+
+```bash
+git clone https://github.com/<你的用户名>/sci_viz.git      # 放在固定位置，如 ~/code/sci_viz
+cd sci_viz
+pip install -e .                  # 可编辑安装：源码仍在这个文件夹，改了立刻生效，不用重装
+pip install -e ".[ridgeline]"     # 要用山脊图 pl.ridgeline 时（会装 joypy 并限制 pandas<3）
+```
+
+之后在**任何项目、任何目录**里：
+
+```python
+import sci_viz as pl
+pl.bar({"A": a, "B": b}, ylabel="Value")
+pl.set_theme("monet")
+from sci_viz import ps                # 样式工具：panel_label / clean_axis / mixed_label ...
+```
+
+- **更新**：`cd` 到仓库 `git pull`，所有项目自动用上新版（可编辑安装的好处）。
+- **新增主题 / 新图**：直接改仓库里的源码，保存后重启 Python 内核（或 `importlib.reload`）即可。
+- **多个环境**（conda / venv）：每个环境里各执行一次 `pip install -e .`。
+- **验证装好了**：`python -c "import sci_viz; print(sci_viz.__file__)"`，路径应指向你的仓库文件夹。
+- **卸载**：`pip uninstall sci_viz`。
+
+不想安装、只想在某个项目里临时用时：把仓库路径加进 `sys.path`（`sys.path.append("/path/to/sci_viz")`）也能 `import sci_viz`。
+
 ## 目录结构
 
 ```
-sci_viz/
-├── utils/
-│   ├── pubstyle.py       # 样式：字体回退、rcParams、中文+公式混排（mixed_label / mixed_legend）
-│   └── palettes.py       # 配色注册表：离散配色、色表、各图默认配色、自定义
-├── plots/
-│   ├── __init__.py       # 统一出口：import plots as pl
-│   ├── relation.py       # regression  joint  pair  ellipse  hexbin  dual_axis
-│   ├── matrix.py         # corr_heatmap  q_heatmap
-│   ├── compare.py        # box  bar  grouped_bar  radar
-│   ├── composition.py    # donut  stacked_bar  smooth_area
-│   ├── distribution.py   # ridgeline
-│   ├── _common.py        # 共用小工具（取 ax、标签、分组数据、保存）
-│   └── _template.py      # 新增一种图的模板
-├── test.ipynb            # 完整测试/教程：每种图的生成方式、并排布局、配色、保存
-├── examples/gallery.py   # 把每个函数都画一遍（示例 + 冒烟测试）
+sci_viz/                       # 仓库根目录
+├── pyproject.toml             # 安装配置（pip install -e . 读它）
+├── src/sci_viz/               # 包本体
+│   ├── __init__.py            # 统一出口：import sci_viz as pl
+│   ├── utils/
+│   │   ├── pubstyle.py        # 样式：字体回退、rcParams、中文+公式混排（mixed_label / mixed_legend）
+│   │   └── palettes.py        # 配色注册表 + 主题（THEMES）+ 各图默认配色
+│   ├── relation.py            # regression  joint  pair  ellipse  hexbin  dual_axis
+│   ├── matrix.py              # corr_heatmap  q_heatmap
+│   ├── compare.py             # box  bar  grouped_bar  radar
+│   ├── composition.py         # donut  stacked_bar  smooth_area
+│   ├── distribution.py        # ridgeline
+│   ├── _common.py             # 共用小工具（取 ax、标签、分组数据、保存）
+│   └── _template.py           # 新增一种图的模板
+├── examples/gallery.py        # 把每个函数都画一遍（示例 + 冒烟测试）
+├── test.ipynb                 # 完整测试/教程：每种图的生成方式、并排布局、主题、配色、保存
 └── requirements.txt
-```
-
-脚本放在仓库根目录就能直接 `import plots as pl`。放在子目录（如 `notebooks/`）时先加一行：
-
-```python
-import sys; sys.path.append("..")     # 按层级调整，指向仓库根目录
 ```
 
 ## 函数一览
@@ -92,7 +113,17 @@ pl.palettes.show_themes()                               # 预览所有主题
 pl.set_theme("classic")                                 # 回到原 notebook 的配色（彼此不统一，仅复现旧图用）
 ```
 
-内置主题：`ocean`（默认，蓝青 + 珊瑚红）`sunset`（暖橙红 + 深蓝）`forest`（绿 + 土黄 + 砖红）`nature`（高饱和，期刊风）`okabe`（色盲友好）`classic`。
+内置主题（共 16 个，`pl.palettes.show_themes()` 预览）：
+
+| 类别 | 主题 |
+|---|---|
+| 默认 / 自配 | `ocean`（默认，蓝青 + 珊瑚红）`sunset` `forest` `slate` `lavender` `earth` |
+| Nature 风 | `nature`（NPG 色板，高饱和） |
+| 色盲友好 | `okabe`（Okabe-Ito）`tol_bright` `tol_vibrant` `tol_muted`（Paul Tol） |
+| 期刊风格 | `aaas`（Science 系）`nejm` `lancet` `jama`（ggsci 色号，按记忆录入，用前请核对） |
+| 复现旧图 | `classic` |
+
+红绿对比强的主题（`nature`、`aaas`、`nejm`、`lancet`）对红绿色盲不友好；需要靠颜色区分类别时用 `okabe` / `tol_*`。
 
 **自定义主题**，只给主色序列就够，其余自动推导：
 
@@ -108,7 +139,7 @@ pl.palettes.register_theme("mine2", cat=[...], accent="#E76F51",
 ```
 
 `set_theme` 还会同步 matplotlib 的默认颜色循环，所以直接用 `plt.plot` 画的图颜色也跟主题一致。
-新增的图：默认自动用主题的 `cat`（离散）或 `seq`（连续），不用在 `DEFAULTS` 里登记；只有想要特殊角色分配（如“散点/拟合线/置信带”）时才需要在 `utils/palettes.py` 的 `_theme_palette_spec` 里加一行。
+新增的图：默认自动用主题的 `cat`（离散）或 `seq`（连续），不用在 `DEFAULTS` 里登记；只有想要特殊角色分配（如“散点/拟合线/置信带”）时才需要在 `src/sci_viz/utils/palettes.py` 的 `_theme_palette_spec` 里加一行。
 
 **配色优先级（高 -> 低）**：单次调用 `palette=` / `cmap=` -> `palettes.use()` 全局覆盖 -> 主题的 `overrides` -> 主题默认。
 
@@ -141,13 +172,13 @@ pl.palettes.use()                # 取消全局覆盖，回到当前主题
 **看有哪些配色**：`pl.palettes.show()` 会画出所有已注册配色的色块；`pl.palettes.list_palettes()` 返回名称。
 
 内置配色名（全部来自原 notebook，数字 = 颜色个数）：`soft4` `teal6` `vivid3` `red_blue4` `sci6` `sunset5` `ring6` `sky_rose` `okabe_ito`；色表：`blue_red` `q_heat`。
-`classic` 主题下各图的默认配色写在 `utils/palettes.py` 的 `DEFAULTS` 里；日常想改默认色，建议自己注册一个主题。
+`classic` 主题下各图的默认配色写在 `src/sci_viz/utils/palettes.py` 的 `DEFAULTS` 里；日常想改默认色，建议自己注册一个主题。
 
 > 颜色个数不够时按顺序循环使用；传了无法识别的颜色或配色名会直接报错并列出可用名称。
 
 ## 字体与公式
 
-导入 `plots` 时自动启用 pubstyle：英文/数字 Times New Roman，中文自动回退 SimSun，`$...$` 里的公式用 Computer Modern。
+导入 `sci_viz` 时自动启用 pubstyle：英文/数字 Times New Roman，中文自动回退 SimSun，`$...$` 里的公式用 Computer Modern。
 需要调整：
 
 ```python
@@ -171,16 +202,16 @@ pl.save(ax, "figures/fig1", formats=("png", "svg"), dpi=600)
 
 ## 新增一种图
 
-四步，详见 `plots/_template.py`：
+四步，详见 `src/sci_viz/_template.py`：
 
-1. 在 `plots/` 对应模块里写函数（遵守“数据第一、`ax` 第二、其余关键字”的约定）
+1. 在 `src/sci_viz/` 对应模块里写函数（遵守“数据第一、`ax` 第二、其余关键字”的约定）
 2. 配色：离散色用 `palettes.get_palette(palette, "函数名", n=...)`、连续色用 `palettes.get_cmap(cmap, "函数名")`，自动跟随主题；`classic` 主题需要时再在 `DEFAULTS` / `DEFAULT_CMAPS` 里补一行
-3. 在 `plots/__init__.py` 里 import 并写进 `__all__`
+3. 在 `src/sci_viz/__init__.py` 里 import 并写进 `__all__`
 4. 在 `examples/gallery.py` 里加 `demo_xxx` 并登记到 `GALLERY`，跑一遍 `python examples/gallery.py xxx` 即是测试
 
 ## 依赖与已知问题
 
-- `pip install -r requirements.txt`；matplotlib 需 ≥ 3.6（字体回退）
+- 依赖由 `pip install -e .` 自动安装；matplotlib 需 ≥ 3.6（字体回退）
 - 只有 `ridgeline` 依赖 joypy，且 **joypy 与 pandas ≥ 3 不兼容**（报 `'generator' object is not subscriptable`），需 `pip install "pandas<3"`
 - 找不到 Times New Roman / SimSun 时 `ps.use()` 会给出警告；macOS 字体装在 `~/Library/Fonts` 即可被自动注册
 

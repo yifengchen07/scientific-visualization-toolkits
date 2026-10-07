@@ -1,7 +1,7 @@
 """分布类：山脊图"""
 import matplotlib.pyplot as plt
 
-from utils import palettes
+from .utils import palettes
 
 
 def ridgeline(df, by, column, *, cmap=None, fade=True, alpha=0.75, overlap=2, title=None,

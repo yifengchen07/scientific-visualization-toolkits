@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sci_viz"
+version = "0.1.0"
+description = "科研绘图工具箱：论文级样式（Times New Roman + SimSun + LaTeX 公式）、一行调用的图表、可切换主题配色"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "matplotlib>=3.6",
+    "seaborn",
+]
+
+[project.optional-dependencies]
+# 只有 pl.ridgeline 需要 joypy；joypy 目前与 pandas>=3 不兼容
+ridgeline = ["joypy", "pandas<3"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

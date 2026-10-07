@@ -8,8 +8,8 @@ from matplotlib.gridspec import GridSpec
 from matplotlib.patches import Ellipse
 from scipy import stats
 
-from utils import pubstyle as ps
-from utils import palettes
+from .utils import pubstyle as ps
+from .utils import palettes
 from ._common import get_ax, set_labels, darken
 
 

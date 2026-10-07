@@ -9,14 +9,11 @@
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))                      # 让 `import plots` / `import utils` 在任何目录下都能用
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-import plots as pl
+import sci_viz as pl
 
 OUT = Path(__file__).resolve().parent / "output"
 

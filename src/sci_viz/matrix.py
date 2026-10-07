@@ -6,7 +6,7 @@ import matplotlib.patches as patches
 from matplotlib.colors import Normalize
 from matplotlib.cm import ScalarMappable
 
-from utils import palettes
+from .utils import palettes
 from ._common import get_ax
 
 

@@ -7,7 +7,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.colors import to_rgb, to_hex
 
-from utils import pubstyle as ps
+from .utils import pubstyle as ps
 
 
 def get_ax(ax, figsize):

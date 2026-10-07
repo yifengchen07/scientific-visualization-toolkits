@@ -201,6 +201,68 @@ THEMES = {
         seq=["#EEF3F8", "#8491B4", "#2E3F6B"],
         div=["#3C5488", "#9FB1D4", "#F6F3EE", "#F39B7F", "#C9341F"]),
 
+    # ---- 用户提供的 11 色渐变（蓝 -> 青 -> 绿 -> 黄 -> 橙 -> 红）----
+    # cat：从 11 色里挑出相邻差异大的 8 个，保证分类图好区分；div：完整 11 色原序，热力图/面积图用
+    "dawn": dict(
+        cat=["#7b95c6", "#f59c7c", "#67a583", "#49c2d9", "#c85e62", "#a2c986", "#fded95", "#a1d8e8"],
+        accent="#f47254",
+        seq=["#fded95", "#f59c7c", "#c85e62"],
+        div=["#7b95c6", "#49c2d9", "#a1d8e8", "#67a583", "#a2c986", "#d0e2c0",
+             "#fded95", "#ffc1a6", "#f59c7c", "#f47254", "#c85e62"]),
+    # ---- 用户提供的 8 色马卡龙 ----
+    "macaron": dict(
+        cat=["#5b99c5", "#faa256", "#badaba", "#f0afaf", "#c2bfd7", "#cde0cc", "#f7bfbf", "#b1ddf0"],
+        accent="#faa256",
+        seq=["#e6f1f8", "#8fbcdc", "#3f7aa8"],
+        div=["#5b99c5", "#b1ddf0", "#f6f3ee", "#f0afaf", "#f08a3a"]),
+    # ---- Nature 2025 论文配色“日出印象”（色号取自小红书笔记截图：#385a75 #6192b5 #98b4ce #eec0a3 #d2d0dc #f2d9be #f0e4d2 #f4f6f1）----
+    # cat：蓝系 + 蜜桃/奶油，按相邻差异大重排；accent 与发散色表暖端的 #d98f62 是在 #eec0a3 基础上加深的（原色太浅，线条看不清）
+    "sunrise_impression": dict(
+        cat=["#6192b5", "#eec0a3", "#385a75", "#98b4ce", "#d2d0dc", "#f2d9be"],
+        accent="#d98f62",
+        seq=["#f4f6f1", "#98b4ce", "#385a75"],
+        div=["#385a75", "#6192b5", "#98b4ce", "#f4f6f1", "#f2d9be", "#eec0a3", "#d98f62"]),
+    # ---- 梵高《奥维尔附近的平原》蓝-黄-绿（色号取自小红书笔记截图：83a0bf baced3 ebd976 c8b015 abc08d 879e48）----
+    # cat 保持截图原顺序；accent 直接用画中芥黄 #c8b015；发散色表两端 #5b7ca3 / #9c8a0e 是加深的（原色太浅，热力图对比弱）；seq 末端 #5f7a2e 也是加深的橄榄绿
+    "auvers": dict(
+        cat=["#83a0bf", "#baced3", "#ebd976", "#c8b015", "#abc08d", "#879e48"],
+        accent="#c8b015",
+        seq=["#f3f2e0", "#abc08d", "#5f7a2e"],
+        div=["#5b7ca3", "#83a0bf", "#baced3", "#f6f4e6", "#ebd976", "#c8b015", "#9c8a0e"]),
+    # ---- 莫奈《睡莲》黄绿 + 灰蓝（色号取自小红书笔记截图：7c9559 90ac7c bdbb55 deb956 9dbdd2 779ebd）----
+    # 尽量还原：cat / accent / 发散色表全部用原色，顺序与截图柱状图 A~F 一致；只有中性色 #f4f4ec 和 seq 的浅端 #eef4f8 是我补的
+    "waterlily": dict(
+        cat=["#7c9559", "#90ac7c", "#bdbb55", "#deb956", "#9dbdd2", "#779ebd"],
+        accent="#deb956",
+        seq=["#eef4f8", "#9dbdd2", "#779ebd"],
+        div=["#779ebd", "#9dbdd2", "#f4f4ec", "#bdbb55", "#deb956"]),
+    # ---- 小红书笔记截图的三套蓝绿配色（色号均取自截图）----
+    # umap：UMAP 细胞类型四色。发散色表的中性色 #f4f8f2、seq 浅端 #e6f1f8 是补的
+    "umap": dict(
+        cat=["#367DB0", "#3D9F3C", "#9DC7DD", "#9ED17B"],
+        accent="#3D9F3C",
+        seq=["#e6f1f8", "#9DC7DD", "#367DB0"],
+        div=["#367DB0", "#9DC7DD", "#f4f8f2", "#9ED17B", "#3D9F3C"]),
+    # blue_ramp：蓝色渐变（深 -> 浅，适合剂量/时间等有序分组），强调色用截图里的绿 #519D78；发散色表 蓝 -> 近白 -> 绿
+    "blue_ramp": dict(
+        cat=["#04579B", "#3492B2", "#58B8D1", "#96C2D4", "#BAD2E1", "#D8E5F7"],
+        accent="#519D78",
+        seq=["#DBF1FA", "#58B8D1", "#04579B"],
+        div=["#04579B", "#3492B2", "#ACEEFE", "#F7FEF0", "#BFE8C1", "#8BCF8B", "#519D78"]),
+    # green_ramp：绿色渐变（深 -> 浅），强调色用截图里的蓝 #5385BD；发散色表 绿 -> 近白 -> 蓝
+    "green_ramp": dict(
+        cat=["#519D78", "#8BCF8B", "#92C2A6", "#AADCA9", "#C4E9CA", "#CEEFCC"],
+        accent="#5385BD",
+        seq=["#F3FBF2", "#8BCF8B", "#519D78"],
+        div=["#519D78", "#8BCF8B", "#DDF3DE", "#D6F6FF", "#58B8D1", "#5385BD"]),
+    # ---- monet：通用科研主题。从莫奈名作的主色里取色相（睡莲的蓝、日出的橙、吉维尼的青绿、罂粟的玫红、干草堆的金黄、薰衣草紫），
+    # 再手工调整明度/饱和度，使 6 个主色在正常视觉与三种色盲模拟下都分得开（相邻最小色差 ≈ 12~30，与 Okabe-Ito 同量级）。
+    # 非原画取样。cat 前 6 个为主色，第 7、8 个（深海蓝、浅天蓝）用于类别 > 6 时。
+    "monet": dict(
+        cat=["#3D78AE", "#E8703A", "#4F9F8A", "#D4607A", "#EDCB62", "#B4A6D8", "#2C4A6E", "#8FB9D6"],
+        accent="#E8703A",
+        seq=["#EAF2F8", "#8FB6D6", "#2C4A6E"],
+        div=["#2F6495", "#8FB6D6", "#F6F1E7", "#F2B07F", "#C85A25"]),
     # ---- 以下为 Paul Tol 色板（色号来自 tueplots 文档），seq/div 为配套推导 ----
     "tol_bright": dict(
         cat=["#4477AA", "#EE6677", "#228833", "#CCBB44", "#66CCEE", "#AA3377"],
@@ -215,35 +277,23 @@ THEMES = {
         accent="#CC6677", seq=["#ECEAF5", "#8E86C4", "#332288"],
         div=["#332288", "#9F9AD0", "#F7F4EE", "#E0A0AA", "#882255"]),
     # ---- 以下为医学/综合期刊风格（ggsci 色号，按记忆录入，未逐一对照官方来源，用前请自行核对）----
-    "monet": dict(
-        cat=["#3D78AE", "#E8703A", "#4F9F8A", "#D4607A", "#EDCB62", "#B4A6D8", "#2C4A6E", "#8FB9D6"],
-        accent="#E8703A",
-        seq=["#EAF2F8", "#8FB6D6", "#2C4A6E"],
-        div=["#2F6495", "#8FB6D6", "#F6F1E7", "#F2B07F", "#C85A25"]),
     "aaas": dict(      # Science 系
-        cat=["#3B4992", "#F03939", "#008B45", "#631879", "#008280", "#5F559B"],
-        accent="#F03939", seq=["#ECEEF6", "#8A92C4", "#3B4992"],
+        cat=["#3B4992", "#EE0000", "#008B45", "#631879", "#008280", "#5F559B"],
+        accent="#EE0000", seq=["#ECEEF6", "#8A92C4", "#3B4992"],
         div=["#3B4992", "#A5ABD2", "#F6F3EE", "#F08C8C", "#BB0000"]),
     "nejm": dict(
         cat=["#BC3C29", "#0072B5", "#E18727", "#20854E", "#7876B1", "#6F99AD"],
         accent="#BC3C29", seq=["#EAF3F9", "#6FA9D2", "#0A5B8E"],
         div=["#0072B5", "#9CC8E2", "#F7F3EA", "#E9A383", "#BC3C29"]),
-    "lancet":  dict(
-        cat=["#7b95c6", "#f59c7c", "#67a583", "#49c2d9", "#c85e62", "#a2c986", "#fded95", "#a1d8e8"],
-        accent="#f47254",
-        seq=["#fded95", "#f59c7c", "#c85e62"],
-        div=["#7b95c6", "#49c2d9", "#a1d8e8", "#67a583", "#a2c986", "#d0e2c0",
-             "#fded95", "#ffc1a6", "#f59c7c", "#f47254", "#c85e62"]),
+    "lancet": dict(
+        cat=["#00468B", "#ED0000", "#42B540", "#0099B4", "#925E9F", "#FDAF91"],
+        accent="#ED0000", seq=["#E8EFF7", "#6C97C6", "#00468B"],
+        div=["#00468B", "#9DB8DA", "#F6F3EE", "#F59A8E", "#AD002A"]),
     "jama": dict(
         cat=["#374E55", "#DF8F44", "#00A1D5", "#B24745", "#79AF97", "#6A6599"],
         accent="#B24745", seq=["#E9EEF0", "#7C98A1", "#374E55"],
         div=["#374E55", "#9DB2B8", "#F6F2EA", "#E3AE7A", "#B24745"]),
     # ---- 自配的低饱和主题 ----
-    "waterlily": dict(
-        cat=["#7c9559", "#90ac7c", "#bdbb55", "#deb956", "#9dbdd2", "#779ebd"],
-        accent="#deb956",
-        seq=["#dde1da", "#90ac7c", "#7c9559"],
-        div=["#779ebd", "#9dbdd2", "#f4f4ec", "#bdbb55", "#deb956"]),
     "slate": dict(     # 石板灰蓝 + 琥珀，稳重
         cat=["#2F3E4E", "#5B7A99", "#9DB4C8", "#D9A441", "#C0504D", "#6E9F8D"],
         accent="#C0504D", seq=["#EDF1F5", "#7F9BB5", "#2F3E4E"],
@@ -263,21 +313,6 @@ THEMES = {
         accent="#D55E00",
         seq=["#EAF3FA", "#56B4E9", "#004C7A"],
         div=["#0072B2", "#9CCBE6", "#F5F2E8", "#F0C060", "#D55E00"]),
-    "macaron": dict(
-        cat=["#5b99c5", "#faa256", "#badaba", "#f0afaf", "#c2bfd7", "#cde0cc", "#f7bfbf", "#b1ddf0"],
-        accent="#faa256",
-        seq=["#e6f1f8", "#8fbcdc", "#3f7aa8"],
-        div=["#5b99c5", "#b1ddf0", "#f6f3ee", "#f0afaf", "#f08a3a"]),
-    "sunrise_impression": dict(
-        cat=["#6192b5", "#eec0a3", "#385a75", "#98b4ce", "#d2d0dc", "#f2d9be"],
-        accent="#d98f62",
-        seq=["#f4f6f1", "#98b4ce", "#385a75"],
-        div=["#385a75", "#6192b5", "#98b4ce", "#f4f6f1", "#f2d9be", "#eec0a3", "#d98f62"]),
-    "auvers": dict(
-        cat=["#83a0bf", "#baced3", "#ebd976", "#e8cd1f", "#abc08d", "#879e48"],
-        accent="#ecd01c",
-        seq=["#f3f2e0", "#abc08d", "#5f7a2e"],
-        div=["#5b7ca3", "#83a0bf", "#baced3", "#f6f4e6", "#ebd976", "#e7cb15", "#9c8a0e"]),
 }
 _THEME_OVERRIDES = {}                      # 当前主题生效的 overrides（register 时的 + set_theme 传入的）
 _current = {"name": "ocean", "overrides": {}}

@@ -1,15 +1,17 @@
 """
-plots —— 科研绘图工具箱。用法：
+sci_viz —— 科研绘图工具箱。用法：
 
-    import plots as pl
+    import sci_viz as pl
     pl.bar({"Control": a, "Treat A": b, "Treat B": c}, ylabel="Value")
 
 导入时会自动启用 pubstyle 样式（Times New Roman + SimSun 回退 + cm 公式）。
 需要换字体 / 公式字体时：pl.use_style(cn_font="SimHei", math_fontset="stix")
 """
-from utils import pubstyle as ps
-from utils import palettes
-from utils.palettes import register_palette, register_cmap, register_theme, set_theme
+__version__ = "0.1.0"
+
+from .utils import pubstyle as ps
+from .utils import palettes
+from .utils.palettes import register_palette, register_cmap, register_theme, set_theme
 
 from ._common import save
 from .relation import regression, joint, pair, ellipse, hexbin, dual_axis

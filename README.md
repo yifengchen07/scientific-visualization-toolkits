@@ -43,24 +43,24 @@ import sys; sys.path.append("..")     # 按层级调整，指向仓库根目录
 所有函数的第 1 个参数是数据，**第 2 个位置参数永远是 `ax`**（`joint` 是 `fig`），其余参数都是关键字参数。
 axes 级函数不传 `ax` 时自动新建画布，返回 `ax`；figure 级函数返回 `fig`。
 
-| 函数                          | 用途                                                                            | 数据输入                | 返回         | `palette` 的含义                  |
-| ----------------------------- | ------------------------------------------------------------------------------- | ----------------------- | ------------ | ----------------------------------- |
-| `regression(x, y)`          | 散点 + 回归线 + 置信带 + R²/p/N（图例自动避开统计框，可用`legend_loc` 指定） | 两个一维数组            | ax           | [散点, 拟合线, 置信带]              |
-| `joint(x, y)`               | 散点回归 + 边缘直方图                                                           | 两个一维数组            | fig          | [散点与直方图, 拟合线, 散点边缘]    |
-| `pair(df, vars, hue)`       | 多变量散点矩阵                                                                  | DataFrame               | fig          | 各分组                              |
-| `ellipse({组名: (x, y)})`   | 分组散点 + 置信椭圆                                                             | dict                    | ax           | 各分组                              |
-| `hexbin(x, y)`              | 六边形分箱 + 边缘直方图                                                         | 两个一维数组            | fig          | [边缘直方图]；`cmap` 控制分箱色表 |
-| `dual_axis(x, y1, y2)`      | 双 Y 轴折线                                                                     | 三个一维数组            | (ax左, ax右) | [左轴, 右轴]                        |
-| `corr_heatmap(df)`          | 相关系数热力图                                                                  | DataFrame（数值列）     | ax           | 用`cmap`（默认 `blue_red`）     |
-| `q_heatmap(df)`             | Q 版圆角热力图                                                                  | DataFrame               | ax           | 用`cmap` / `high_color`         |
-| `box(data)`                 | 分组箱线图                                                                      | dict / DataFrame / 列表 | ax           | 各组                                |
-| `bar(data)`                 | 均值 ± SEM 柱状图 + 抖动散点                                                   | dict / DataFrame / 列表 | ax           | 各组                                |
-| `grouped_bar(df, category)` | 并列柱状图                                                                      | DataFrame               | ax           | 各系列                              |
-| `radar(data, criteria)`     | 环形雷达图                                                                      | dict {模型: 各指标值}   | ax           | 各模型；`ring_palette` 为外圈     |
-| `donut(values, labels)`     | 甜甜圈饼图                                                                      | 两个列表                | ax           | 各扇区                              |
-| `stacked_bar(df, category)` | 堆积柱状图                                                                      | DataFrame               | ax           | 各层（自下而上）                    |
-| `smooth_area(df)`           | 平滑百分比堆叠面积图                                                            | DataFrame（首列为类别） | ax           | 各层（自下而上）                    |
-| `ridgeline(df, by, column)` | 山脊图                                                                          | 长表 DataFrame          | fig          | 用`cmap`（默认 `autumn`）       |
+| 函数 | 用途 | 数据输入 | 返回 | `palette` 的含义 |
+|---|---|---|---|---|
+| `regression(x, y)` | 散点 + 回归线 + 置信带 + R²/p/N（图例自动避开统计框，可用 `legend_loc` 指定）| 两个一维数组 | ax | [散点, 拟合线, 置信带] |
+| `joint(x, y)` | 散点回归 + 边缘直方图 | 两个一维数组 | fig | [散点与直方图, 拟合线, 散点边缘] |
+| `pair(df, vars, hue)` | 多变量散点矩阵 | DataFrame | fig | 各分组 |
+| `ellipse({组名: (x, y)})` | 分组散点 + 置信椭圆 | dict | ax | 各分组 |
+| `hexbin(x, y)` | 六边形分箱 + 边缘直方图 | 两个一维数组 | fig | [边缘直方图]；`cmap` 控制分箱色表 |
+| `dual_axis(x, y1, y2)` | 双 Y 轴折线 | 三个一维数组 | (ax左, ax右) | [左轴, 右轴] |
+| `corr_heatmap(df)` | 相关系数热力图 | DataFrame（数值列） | ax | 用 `cmap`（默认 `blue_red`） |
+| `q_heatmap(df)` | Q 版圆角热力图 | DataFrame | ax | 用 `cmap` / `high_color` |
+| `box(data)` | 分组箱线图 | dict / DataFrame / 列表 | ax | 各组 |
+| `bar(data)` | 均值 ± SEM 柱状图 + 抖动散点 | dict / DataFrame / 列表 | ax | 各组 |
+| `grouped_bar(df, category)` | 并列柱状图 | DataFrame | ax | 各系列 |
+| `radar(data, criteria)` | 环形雷达图 | dict {模型: 各指标值} | ax | 各模型；`ring_palette` 为外圈 |
+| `donut(values, labels)` | 甜甜圈饼图 | 两个列表 | ax | 各扇区 |
+| `stacked_bar(df, category)` | 堆积柱状图 | DataFrame | ax | 各层（自下而上） |
+| `smooth_area(df)` | 平滑百分比堆叠面积图 | DataFrame（首列为类别） | ax | 各层（自下而上） |
+| `ridgeline(df, by, column)` | 山脊图 | 长表 DataFrame | fig | 用 `cmap`（默认 `autumn`） |
 
 每个函数的详细参数看 docstring（`help(pl.bar)`）。想看全部效果：`python examples/gallery.py`，图保存在 `examples/output/`。
 
@@ -78,6 +78,39 @@ fig.tight_layout()
 fig = plt.figure(figsize=(7.2, 3.1)); s1, s2 = fig.subfigures(1, 2)
 pl.joint(x1, y1, s1); pl.joint(x2, y2, s2)
 ```
+
+## 主题（整篇论文配色统一）
+
+**主题 = 一组相互匹配的颜色**：主色序列 `cat`、强调色 `accent`、连续色表 `seq`、发散色表 `div`。
+所有图的**默认配色都从当前主题派生**（柱/箱/饼/雷达用主色序列，拟合线和双轴另一侧用强调色，热力图用发散色表，hexbin/山脊图用连续色表），
+整篇论文用同一个主题，所有图配色自动匹配。默认主题是 `ocean`。
+
+```python
+pl.set_theme("sunset")                                  # 切换主题，之后所有图都跟着变
+pl.set_theme("ocean", overrides={"bar": "vivid3"})      # 主题不变，只有 bar 用特殊配色（key = 函数名）
+pl.palettes.show_themes()                               # 预览所有主题
+pl.set_theme("classic")                                 # 回到原 notebook 的配色（彼此不统一，仅复现旧图用）
+```
+
+内置主题：`ocean`（默认，蓝青 + 珊瑚红）`sunset`（暖橙红 + 深蓝）`forest`（绿 + 土黄 + 砖红）`nature`（高饱和，期刊风）`okabe`（色盲友好）`classic`。
+
+**自定义主题**，只给主色序列就够，其余自动推导：
+
+```python
+pl.palettes.register_theme("mine", cat=["#264653", "#2a9d8f", "#e9c46a", "#f4a261", "#e76f51"])
+pl.set_theme("mine")
+
+# 想精细控制再补 accent / seq（3 个锚点，浅->深）/ div（5 个锚点，负->中性->正）/ overrides
+pl.palettes.register_theme("mine2", cat=[...], accent="#E76F51",
+                           seq=["#EEF5F5", "#2a9d8f", "#10403B"],
+                           div=["#264653", "#8FB8B5", "#F7F4EA", "#F4A261", "#E76F51"],
+                           overrides={"bar": "vivid3"})
+```
+
+`set_theme` 还会同步 matplotlib 的默认颜色循环，所以直接用 `plt.plot` 画的图颜色也跟主题一致。
+新增的图：默认自动用主题的 `cat`（离散）或 `seq`（连续），不用在 `DEFAULTS` 里登记；只有想要特殊角色分配（如“散点/拟合线/置信带”）时才需要在 `utils/palettes.py` 的 `_theme_palette_spec` 里加一行。
+
+**配色优先级（高 -> 低）**：单次调用 `palette=` / `cmap=` -> `palettes.use()` 全局覆盖 -> 主题的 `overrides` -> 主题默认。
 
 ## 配色
 
@@ -102,13 +135,13 @@ pl.bar(data, palette="mine")
 
 ```python
 pl.palettes.use("mine")          # 全部用 mine
-pl.palettes.use()                # 恢复各图原来的默认配色
+pl.palettes.use()                # 取消全局覆盖，回到当前主题
 ```
 
 **看有哪些配色**：`pl.palettes.show()` 会画出所有已注册配色的色块；`pl.palettes.list_palettes()` 返回名称。
 
 内置配色名（全部来自原 notebook，数字 = 颜色个数）：`soft4` `teal6` `vivid3` `red_blue4` `sci6` `sunset5` `ring6` `sky_rose` `okabe_ito`；色表：`blue_red` `q_heat`。
-各图的默认配色写在 `utils/palettes.py` 的 `DEFAULTS` 里，想永久改某张图的默认色，改那里即可。
+`classic` 主题下各图的默认配色写在 `utils/palettes.py` 的 `DEFAULTS` 里；日常想改默认色，建议自己注册一个主题。
 
 > 颜色个数不够时按顺序循环使用；传了无法识别的颜色或配色名会直接报错并列出可用名称。
 
@@ -141,7 +174,7 @@ pl.save(ax, "figures/fig1", formats=("png", "svg"), dpi=600)
 四步，详见 `plots/_template.py`：
 
 1. 在 `plots/` 对应模块里写函数（遵守“数据第一、`ax` 第二、其余关键字”的约定）
-2. 在 `utils/palettes.py` 的 `DEFAULTS` / `DEFAULT_CMAPS` 里加默认配色，key = 函数名
+2. 配色：离散色用 `palettes.get_palette(palette, "函数名", n=...)`、连续色用 `palettes.get_cmap(cmap, "函数名")`，自动跟随主题；`classic` 主题需要时再在 `DEFAULTS` / `DEFAULT_CMAPS` 里补一行
 3. 在 `plots/__init__.py` 里 import 并写进 `__all__`
 4. 在 `examples/gallery.py` 里加 `demo_xxx` 并登记到 `GALLERY`，跑一遍 `python examples/gallery.py xxx` 即是测试
 
@@ -150,3 +183,11 @@ pl.save(ax, "figures/fig1", formats=("png", "svg"), dpi=600)
 - `pip install -r requirements.txt`；matplotlib 需 ≥ 3.6（字体回退）
 - 只有 `ridgeline` 依赖 joypy，且 **joypy 与 pandas ≥ 3 不兼容**（报 `'generator' object is not subscriptable`），需 `pip install "pandas<3"`
 - 找不到 Times New Roman / SimSun 时 `ps.use()` 会给出警告；macOS 字体装在 `~/Library/Fonts` 即可被自动注册
+
+## 与原 notebook 的差异
+
+- `regression` 的置信带：原代码用 `t.ppf(0.95)`，实际是 90% 双侧区间却标成了 “95% CI”；现在按 `ci=0.95` 正确取 `t.ppf(0.975)`，带宽会略宽一点。想复现旧效果可传 `ci=0.90`
+- 画布按论文尺寸等比缩小，字号、粗体统一交给 pubstyle，刻度方向为向外
+- 默认配色改为跟随主题（`ocean`）；想要原来的颜色用 `pl.set_theme("classic")`
+- `radar` 不再修改传入的数据；`dual_axis` 的横轴刻度旋转已修复（原来设在了不显示的右轴上）
+- `q_heatmap` 色条的 Low / High 现在固定落在两端

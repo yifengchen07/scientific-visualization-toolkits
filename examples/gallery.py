@@ -207,6 +207,11 @@ def demo_mixed_label():
     return ax.figure
 
 
+def demo_themes():
+    """主题总览 + 同一批图换主题。"""
+    return pl.palettes.show_themes()
+
+
 def demo_palettes():
     return pl.palettes.show()
 
@@ -217,7 +222,7 @@ GALLERY = {
     "dual_axis": demo_dual_axis, "box": demo_box, "bar": demo_bar, "grouped_bar": demo_grouped_bar,
     "radar": demo_radar, "stacked_bar": demo_stacked_bar, "donut": demo_donut,
     "smooth_area": demo_smooth_area, "q_heatmap": demo_q_heatmap, "ridgeline": demo_ridgeline,
-    "custom_palette": demo_custom_palette, "mixed_label": demo_mixed_label, "palettes": demo_palettes,
+    "custom_palette": demo_custom_palette, "mixed_label": demo_mixed_label, "palettes": demo_palettes, "themes": demo_themes,
 }
 
 

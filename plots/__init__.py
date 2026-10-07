@@ -9,7 +9,7 @@ plots —— 科研绘图工具箱。用法：
 """
 from utils import pubstyle as ps
 from utils import palettes
-from utils.palettes import register_palette, register_cmap
+from utils.palettes import register_palette, register_cmap, register_theme, set_theme
 
 from ._common import save
 from .relation import regression, joint, pair, ellipse, hexbin, dual_axis
@@ -30,7 +30,7 @@ __all__ = [
     # 分布
     "ridgeline",
     # 工具
-    "save", "use_style", "ps", "palettes", "register_palette", "register_cmap",
+    "save", "use_style", "ps", "palettes", "register_palette", "register_cmap", "register_theme", "set_theme",
 ]
 
 

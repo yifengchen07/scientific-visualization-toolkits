@@ -59,7 +59,8 @@ def q_heatmap(df, ax=None, *, cmap=None, high_color=None, corner_radius=0.3, cel
         fig, own_fig = ax.figure, False
 
     if cmap is None and high_color is not None:
-        cmap = ["#79C7FF", "#F0F0F0", high_color]
+        base = palettes.get_cmap(None, "q_heatmap")
+        cmap = [base(0.0), base(0.5), high_color]      # 低/中沿用当前主题，只换高值色
     my_cmap = palettes.get_cmap(cmap, "q_heatmap")
 
     vmin, vmax = df.min().min(), df.max().max()

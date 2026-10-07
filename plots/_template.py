@@ -4,7 +4,7 @@
 四步走：
   1. 在 plots/ 下合适的模块（relation / matrix / compare / composition / distribution）里写函数，
      或者新建一个模块，如 plots/timeseries.py
-  2. 在 utils/palettes.py 的 DEFAULTS（离散配色）或 DEFAULT_CMAPS（连续色表）里加上默认配色，key = 函数名
+  2. 配色走 palettes.get_palette / get_cmap 即可自动跟随主题（离散色用主题 cat，连续色用 seq）；默认角色分配见 palettes._theme_palette_spec
   3. 在 plots/__init__.py 里 import 并写进 __all__
   4. 在 examples/gallery.py 里加一个 demo_xxx 并登记到 GALLERY（它同时就是冒烟测试）
 
@@ -33,7 +33,7 @@ def violin(data, ax=None, *, labels=None, palette=None, title=None, xlabel=None,
     """
     ax = get_ax(ax, figsize)
     names, arrs = groups_from(data, labels)
-    colors = palettes.get_palette(palette, "violin", n=len(arrs))      # 别忘了在 DEFAULTS 里加 "violin"
+    colors = palettes.get_palette(palette, "violin", n=len(arrs))      # 自动跟随主题 cat；classic 主题才需要在 DEFAULTS 补 "violin"
 
     parts = ax.violinplot(arrs, showmeans=True)
     for body, c in zip(parts["bodies"], colors):

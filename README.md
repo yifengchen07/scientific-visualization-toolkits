@@ -43,24 +43,24 @@ import sys; sys.path.append("..")     # 按层级调整，指向仓库根目录
 所有函数的第 1 个参数是数据，**第 2 个位置参数永远是 `ax`**（`joint` 是 `fig`），其余参数都是关键字参数。
 axes 级函数不传 `ax` 时自动新建画布，返回 `ax`；figure 级函数返回 `fig`。
 
-| 函数 | 用途 | 数据输入 | 返回 | `palette` 的含义 |
-|---|---|---|---|---|
-| `regression(x, y)` | 散点 + 回归线 + 置信带 + R²/p/N（图例自动避开统计框，可用 `legend_loc` 指定）| 两个一维数组 | ax | [散点, 拟合线, 置信带] |
-| `joint(x, y)` | 散点回归 + 边缘直方图 | 两个一维数组 | fig | [散点与直方图, 拟合线, 散点边缘] |
-| `pair(df, vars, hue)` | 多变量散点矩阵 | DataFrame | fig | 各分组 |
-| `ellipse({组名: (x, y)})` | 分组散点 + 置信椭圆 | dict | ax | 各分组 |
-| `hexbin(x, y)` | 六边形分箱 + 边缘直方图 | 两个一维数组 | fig | [边缘直方图]；`cmap` 控制分箱色表 |
-| `dual_axis(x, y1, y2)` | 双 Y 轴折线 | 三个一维数组 | (ax左, ax右) | [左轴, 右轴] |
-| `corr_heatmap(df)` | 相关系数热力图 | DataFrame（数值列） | ax | 用 `cmap`（默认 `blue_red`） |
-| `q_heatmap(df)` | Q 版圆角热力图 | DataFrame | ax | 用 `cmap` / `high_color` |
-| `box(data)` | 分组箱线图 | dict / DataFrame / 列表 | ax | 各组 |
-| `bar(data)` | 均值 ± SEM 柱状图 + 抖动散点 | dict / DataFrame / 列表 | ax | 各组 |
-| `grouped_bar(df, category)` | 并列柱状图 | DataFrame | ax | 各系列 |
-| `radar(data, criteria)` | 环形雷达图 | dict {模型: 各指标值} | ax | 各模型；`ring_palette` 为外圈 |
-| `donut(values, labels)` | 甜甜圈饼图 | 两个列表 | ax | 各扇区 |
-| `stacked_bar(df, category)` | 堆积柱状图 | DataFrame | ax | 各层（自下而上） |
-| `smooth_area(df)` | 平滑百分比堆叠面积图 | DataFrame（首列为类别） | ax | 各层（自下而上） |
-| `ridgeline(df, by, column)` | 山脊图 | 长表 DataFrame | fig | 用 `cmap`（默认 `autumn`） |
+| 函数                          | 用途                                                                            | 数据输入                | 返回         | `palette` 的含义                  |
+| ----------------------------- | ------------------------------------------------------------------------------- | ----------------------- | ------------ | ----------------------------------- |
+| `regression(x, y)`          | 散点 + 回归线 + 置信带 + R²/p/N（图例自动避开统计框，可用`legend_loc` 指定） | 两个一维数组            | ax           | [散点, 拟合线, 置信带]              |
+| `joint(x, y)`               | 散点回归 + 边缘直方图                                                           | 两个一维数组            | fig          | [散点与直方图, 拟合线, 散点边缘]    |
+| `pair(df, vars, hue)`       | 多变量散点矩阵                                                                  | DataFrame               | fig          | 各分组                              |
+| `ellipse({组名: (x, y)})`   | 分组散点 + 置信椭圆                                                             | dict                    | ax           | 各分组                              |
+| `hexbin(x, y)`              | 六边形分箱 + 边缘直方图                                                         | 两个一维数组            | fig          | [边缘直方图]；`cmap` 控制分箱色表 |
+| `dual_axis(x, y1, y2)`      | 双 Y 轴折线                                                                     | 三个一维数组            | (ax左, ax右) | [左轴, 右轴]                        |
+| `corr_heatmap(df)`          | 相关系数热力图                                                                  | DataFrame（数值列）     | ax           | 用`cmap`（默认 `blue_red`）     |
+| `q_heatmap(df)`             | Q 版圆角热力图                                                                  | DataFrame               | ax           | 用`cmap` / `high_color`         |
+| `box(data)`                 | 分组箱线图                                                                      | dict / DataFrame / 列表 | ax           | 各组                                |
+| `bar(data)`                 | 均值 ± SEM 柱状图 + 抖动散点                                                   | dict / DataFrame / 列表 | ax           | 各组                                |
+| `grouped_bar(df, category)` | 并列柱状图                                                                      | DataFrame               | ax           | 各系列                              |
+| `radar(data, criteria)`     | 环形雷达图                                                                      | dict {模型: 各指标值}   | ax           | 各模型；`ring_palette` 为外圈     |
+| `donut(values, labels)`     | 甜甜圈饼图                                                                      | 两个列表                | ax           | 各扇区                              |
+| `stacked_bar(df, category)` | 堆积柱状图                                                                      | DataFrame               | ax           | 各层（自下而上）                    |
+| `smooth_area(df)`           | 平滑百分比堆叠面积图                                                            | DataFrame（首列为类别） | ax           | 各层（自下而上）                    |
+| `ridgeline(df, by, column)` | 山脊图                                                                          | 长表 DataFrame          | fig          | 用`cmap`（默认 `autumn`）       |
 
 每个函数的详细参数看 docstring（`help(pl.bar)`）。想看全部效果：`python examples/gallery.py`，图保存在 `examples/output/`。
 
@@ -150,10 +150,3 @@ pl.save(ax, "figures/fig1", formats=("png", "svg"), dpi=600)
 - `pip install -r requirements.txt`；matplotlib 需 ≥ 3.6（字体回退）
 - 只有 `ridgeline` 依赖 joypy，且 **joypy 与 pandas ≥ 3 不兼容**（报 `'generator' object is not subscriptable`），需 `pip install "pandas<3"`
 - 找不到 Times New Roman / SimSun 时 `ps.use()` 会给出警告；macOS 字体装在 `~/Library/Fonts` 即可被自动注册
-
-## 与原 notebook 的差异
-
-- `regression` 的置信带：原代码用 `t.ppf(0.95)`，实际是 90% 双侧区间却标成了 “95% CI”；现在按 `ci=0.95` 正确取 `t.ppf(0.975)`，带宽会略宽一点。想复现旧效果可传 `ci=0.90`
-- 画布按论文尺寸等比缩小，字号、粗体统一交给 pubstyle，刻度方向为向外
-- `radar` 不再修改传入的数据；`dual_axis` 的横轴刻度旋转已修复（原来设在了不显示的右轴上）
-- `q_heatmap` 色条的 Low / High 现在固定落在两端

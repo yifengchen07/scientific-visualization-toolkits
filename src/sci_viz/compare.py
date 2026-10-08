@@ -63,7 +63,7 @@ def bar(data, ax=None, *, labels=None, palette=None, show_points=True, jitter=0.
     for i, (a, c) in enumerate(zip(arrs, colors)):
         mean = a.mean()
         sem = a.std(ddof=1) / np.sqrt(len(a))
-        ax.bar(i, mean, color=c, alpha=0.5, width=0.6, edgecolor=c, linewidth=2, zorder=1)
+        ax.bar(i, mean, color=c, alpha=0.85, width=0.6, linewidth=2, zorder=1)
         ax.errorbar(i, mean, yerr=sem, fmt="none", ecolor="black", capsize=5, elinewidth=1.2, zorder=4)
         if show_points:
             ax.scatter(i + rng.normal(0, jitter, size=len(a)), a, color=c, alpha=0.9, s=30,
@@ -95,8 +95,8 @@ def grouped_bar(df, category, series=None, ax=None, *, palette=None, bar_width=0
     n_bars = len(series)
     for i, col in enumerate(series):
         offset = (i - (n_bars - 1) / 2) * bar_width
-        ax.bar(index + offset, df[col], bar_width, label=col, color=colors[i], alpha=0.6,
-               edgecolor=colors[i], linewidth=2)
+        ax.bar(index + offset, df[col], bar_width, label=col, color=colors[i], alpha=0.85,
+                linewidth=2)
 
     ax.set_xticks(index)
     ax.set_xticklabels(df[category])
@@ -230,7 +230,7 @@ def rate_bar(data, ax=None, *, by=None, value=None, hue=None, order=None, hue_or
                 if show_values:
                     ax.text(hi + pad, pos, f"{val:.1f}", va="center", ha="left", fontsize=7)
             else:
-                ax.bar(pos, val, width=w * 0.92, color=c, alpha=0.5, edgecolor=c, linewidth=2, zorder=2, label=lab)
+                ax.bar(pos, val, width=w * 0.92, color=c, alpha=0.85, linewidth=2, zorder=2, label=lab)
                 ax.errorbar(pos, val, yerr=err, fmt="none", ecolor="black", capsize=3, elinewidth=1.1, zorder=4)
                 if show_values:
                     ax.text(pos, hi + pad, f"{val:.1f}", ha="center", va="bottom", fontsize=7)

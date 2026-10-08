@@ -204,6 +204,20 @@ def demo_mixed_label():
     return ax.figure
 
 
+def demo_rate_bar():
+    """比例柱状图（准确率 / 召回率 / True 占比）+ Wilson 置信区间 + 基线。"""
+    rng = np.random.default_rng(0)
+    df = pd.DataFrame({"type": rng.choice(["A", "B", "C", "D"], 600, p=[.4, .3, .2, .1])})
+    df["ok"] = rng.random(600) < df["type"].map({"A": .55, "B": .8, "C": .85, "D": .7})
+    return pl.rate_bar(df, by="type", value="ok", baseline=0.69, baseline_label="Baseline").figure
+
+
+def demo_confusion_heatmap():
+    """混淆矩阵热力图：数量 + 行归一化百分比。"""
+    cm = pd.DataFrame([[924, 735], [91, 650]], index=["Harmless", "Harmful"], columns=["Harmless", "Harmful"])
+    return pl.confusion_heatmap(cm).figure
+
+
 def demo_themes():
     """主题总览 + 同一批图换主题。"""
     return pl.palettes.show_themes()
@@ -219,6 +233,7 @@ GALLERY = {
     "dual_axis": demo_dual_axis, "box": demo_box, "bar": demo_bar, "grouped_bar": demo_grouped_bar,
     "radar": demo_radar, "stacked_bar": demo_stacked_bar, "donut": demo_donut,
     "smooth_area": demo_smooth_area, "q_heatmap": demo_q_heatmap, "ridgeline": demo_ridgeline,
+    "rate_bar": demo_rate_bar, "confusion_heatmap": demo_confusion_heatmap,
     "custom_palette": demo_custom_palette, "mixed_label": demo_mixed_label, "palettes": demo_palettes, "themes": demo_themes,
 }
 

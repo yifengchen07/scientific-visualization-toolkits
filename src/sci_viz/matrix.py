@@ -1,13 +1,14 @@
 """矩阵类：相关性热力图、Q 版圆角热力图"""
 import numpy as np
+import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.colors import Normalize
+from matplotlib.colors import Normalize, to_rgb
 from matplotlib.cm import ScalarMappable
 
 from .utils import palettes
-from ._common import get_ax
+from ._common import get_ax, set_labels
 
 
 # ======================================================================
@@ -97,4 +98,91 @@ def q_heatmap(df, ax=None, *, cmap=None, high_color=None, corner_radius=0.3, cel
 
     if own_fig:
         fig.tight_layout()
+    return ax
+
+
+# ======================================================================
+def confusion_heatmap(cm, ax=None, *, labels=None, pred_labels=None, normalize="true", cmap=None,
+                      annot="both", fontsize=7, title=None, xlabel="Predicted", ylabel="True",
+                      cbar=True, cbar_label=None, xtick_rotation=0, figsize=None):
+    """
+    混淆矩阵热力图：格子里写“数量 + 百分比”，颜色按百分比深浅。     [axes 级，返回 ax]
+
+    cm          : DataFrame（行 = 真实类别，列 = 预测类别，值 = 数量；可用 stats.confusion_table 生成），
+                  或二维数组（此时用 labels / pred_labels 给行列命名）。行列数可以不同
+    normalize   : "true" 按行归一化（每行 100% = 该真实类别的召回分布，推荐）
+                  "pred" 按列归一化 / "all" 按总数 / None 不归一化（颜色按数量）
+    annot       : "both" 数量 + 百分比 / "count" 只写数量 / "pct" 只写百分比 / None 不写
+    cmap        : 色表，默认跟随主题的连续色（浅 -> 深）
+    cbar_label  : 色条标签，默认按 normalize 自动生成
+    """
+    if not isinstance(cm, pd.DataFrame):
+        cm = pd.DataFrame(np.asarray(cm), index=labels, columns=pred_labels)
+    elif labels is not None or pred_labels is not None:
+        cm = cm.copy()
+        if labels is not None:
+            cm.index = list(labels)
+        if pred_labels is not None:
+            cm.columns = list(pred_labels)
+    counts = cm.to_numpy(float)
+    nr, nc = counts.shape
+    with np.errstate(divide="ignore", invalid="ignore"):
+        if normalize == "true":
+            frac = counts / counts.sum(axis=1, keepdims=True)
+        elif normalize == "pred":
+            frac = counts / counts.sum(axis=0, keepdims=True)
+        elif normalize == "all":
+            frac = counts / counts.sum()
+        elif normalize is None:
+            frac = counts / counts.max()
+        else:
+            raise ValueError("normalize 应为 'true' / 'pred' / 'all' / None")
+    frac = np.nan_to_num(frac)
+    pctv = frac * 100
+
+    if figsize is None:
+        figsize = (0.95 * nc + 1.5, 0.8 * nr + 1.0)
+    ax = get_ax(ax, figsize)
+    cmap_ = palettes.get_cmap(cmap, "confusion_heatmap")
+    vmax = 1.0 if normalize in ("true", "pred") else float(frac.max() or 1.0)
+    im = ax.imshow(frac, cmap=cmap_, vmin=0, vmax=vmax, aspect="equal")
+
+    if annot:
+        for i in range(nr):
+            for j in range(nc):
+                r, g, b = to_rgb(cmap_(frac[i, j] / vmax if vmax else 0))
+                txt = "white" if 0.299 * r + 0.587 * g + 0.114 * b < 0.55 else "#222222"
+                if annot == "both":
+                    s = f"{counts[i, j]:,.0f}\n({pctv[i, j]:.1f}%)" if normalize else f"{counts[i, j]:,.0f}"
+                elif annot == "count":
+                    s = f"{counts[i, j]:,.0f}"
+                else:
+                    s = f"{pctv[i, j]:.1f}%"
+                ax.text(j, i, s, ha="center", va="center", fontsize=fontsize, color=txt)
+
+    ax.set_xticks(range(nc))
+    ax.set_xticklabels([str(c) for c in cm.columns], rotation=xtick_rotation,
+                       ha="right" if xtick_rotation else "center")
+    ax.set_yticks(range(nr))
+    ax.set_yticklabels([str(i) for i in cm.index])
+    ax.set_xticks(np.arange(-0.5, nc, 1), minor=True)
+    ax.set_yticks(np.arange(-0.5, nr, 1), minor=True)
+    ax.grid(which="minor", color="white", linewidth=1.5)
+    ax.grid(which="major", visible=False)
+    ax.tick_params(which="both", length=0)
+    for sp in ax.spines.values():
+        sp.set_visible(False)
+    set_labels(ax, title, xlabel, ylabel)
+
+    if cbar:
+        cb = ax.figure.colorbar(im, ax=ax, shrink=0.8, pad=0.03, fraction=0.05)
+        cb.outline.set_visible(False)
+        cb.ax.tick_params(labelsize=fontsize)
+        if cbar_label is None:
+            cbar_label = {"true": "Row-normalized (%)", "pred": "Column-normalized (%)",
+                          "all": "Share of all samples (%)", None: "Relative count"}[normalize]
+        cb.set_label(cbar_label, size=fontsize + 0.5)
+        if normalize in ("true", "pred"):
+            cb.set_ticks([0, 0.25, 0.5, 0.75, 1.0])
+            cb.set_ticklabels(["0", "25", "50", "75", "100"])
     return ax

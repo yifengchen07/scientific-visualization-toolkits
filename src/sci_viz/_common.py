@@ -84,3 +84,26 @@ def save(obj, path, dpi=300, formats=("png", "pdf"), **kwargs):
     for p in paths:
         fig.savefig(p, dpi=dpi, **kwargs)
     return paths
+
+
+# 期刊常用图宽（英寸）：单栏 89 mm、1.5 栏 120 mm、双栏 183 mm（Nature 系列的常见规格；其他期刊以其投稿须知为准）
+FIG_WIDTH = {"single": 89 / 25.4, "1.5": 120 / 25.4, "double": 183 / 25.4}
+
+
+def figsize(width="single", ratio=0.75, height=None):
+    """
+    按期刊栏宽给出 figsize，用法：plt.subplots(figsize=pl.figsize("double", 0.4))
+
+    width  : "single"（89 mm）/ "1.5"（120 mm）/ "double"（183 mm）/ 英寸数字 / "100mm" 这样的字符串
+    ratio  : 高 / 宽（默认 0.75）；height 给定（英寸）时忽略 ratio
+    """
+    if isinstance(width, str):
+        if width in FIG_WIDTH:
+            w = FIG_WIDTH[width]
+        elif width.lower().endswith("mm"):
+            w = float(width[:-2]) / 25.4
+        else:
+            raise ValueError(f"width 应为 {list(FIG_WIDTH)}、英寸数字或 '89mm' 这样的字符串")
+    else:
+        w = float(width)
+    return (round(w, 3), round(height if height is not None else w * ratio, 3))

@@ -13,10 +13,12 @@ from .utils import pubstyle as ps
 from .utils import palettes
 from .utils.palettes import register_palette, register_cmap, register_theme, set_theme
 
-from ._common import save
+from ._common import save, figsize
+from . import stats
+from .loaders import read_jsonl
 from .relation import regression, joint, pair, ellipse, hexbin, dual_axis
-from .matrix import corr_heatmap, q_heatmap
-from .compare import box, bar, grouped_bar, radar
+from .matrix import corr_heatmap, q_heatmap, confusion_heatmap
+from .compare import box, bar, grouped_bar, radar, rate_bar
 from .composition import donut, stacked_bar, smooth_area
 from .distribution import ridgeline
 
@@ -24,15 +26,15 @@ __all__ = [
     # 关系
     "regression", "joint", "pair", "ellipse", "hexbin", "dual_axis",
     # 矩阵
-    "corr_heatmap", "q_heatmap",
+    "corr_heatmap", "q_heatmap", "confusion_heatmap",
     # 比较
-    "box", "bar", "grouped_bar", "radar",
+    "box", "bar", "grouped_bar", "radar", "rate_bar",
     # 构成
     "donut", "stacked_bar", "smooth_area",
     # 分布
     "ridgeline",
     # 工具
-    "save", "use_style", "ps", "palettes", "register_palette", "register_cmap", "register_theme", "set_theme",
+    "save", "figsize", "stats", "read_jsonl", "use_style", "ps", "palettes", "register_palette", "register_cmap", "register_theme", "set_theme",
 ]
 
 

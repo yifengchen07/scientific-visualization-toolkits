@@ -48,13 +48,16 @@ sci_viz/                       # 仓库根目录
 │   │   ├── pubstyle.py        # 样式：字体回退、rcParams、中文+公式混排（mixed_label / mixed_legend）
 │   │   └── palettes.py        # 配色注册表 + 主题（THEMES）+ 各图默认配色
 │   ├── relation.py            # regression  joint  pair  ellipse  hexbin  dual_axis
-│   ├── matrix.py              # corr_heatmap  q_heatmap
-│   ├── compare.py             # box  bar  grouped_bar  radar
+│   ├── matrix.py              # corr_heatmap  q_heatmap  confusion_heatmap
+│   ├── compare.py             # box  bar  grouped_bar  radar  rate_bar
+│   ├── stats.py               # Wilson/bootstrap 置信区间、二分类指标、混淆矩阵表、McNemar、format_ci
+│   ├── loaders.py             # read_jsonl（文件 / 通配符 / 文件夹）
 │   ├── composition.py         # donut  stacked_bar  smooth_area
 │   ├── distribution.py        # ridgeline
 │   ├── _common.py             # 共用小工具（取 ax、标签、分组数据、保存）
 │   └── _template.py           # 新增一种图的模板
 ├── examples/gallery.py        # 把每个函数都画一遍（示例 + 冒烟测试）
+├── notebooks/meme_detection_viz.ipynb   # 真实实验（有害模因检测）的完整出图 notebook
 ├── test.ipynb                 # 完整测试/教程：每种图的生成方式、并排布局、主题、配色、保存
 └── requirements.txt
 ```
@@ -77,6 +80,8 @@ axes 级函数不传 `ax` 时自动新建画布，返回 `ax`；figure 级函数
 | `box(data)` | 分组箱线图 | dict / DataFrame / 列表 | ax | 各组 |
 | `bar(data)` | 均值 ± SEM 柱状图 + 抖动散点 | dict / DataFrame / 列表 | ax | 各组 |
 | `grouped_bar(df, category)` | 并列柱状图 | DataFrame | ax | 各系列 |
+| `rate_bar(df, by=, value=)` | 比例柱状图 + Wilson 置信区间 + 基线（准确率 / 召回率 / True 占比） | DataFrame / dict | ax | 各组（有 hue 时为各 hue） |
+| `confusion_heatmap(cm)` | 混淆矩阵热力图（数量 + 百分比） | DataFrame / 二维数组 | ax | 用 `cmap`（默认 `Blues`） |
 | `radar(data, criteria)` | 环形雷达图 | dict {模型: 各指标值} | ax | 各模型；`ring_palette` 为外圈 |
 | `donut(values, labels)` | 甜甜圈饼图 | 两个列表 | ax | 各扇区 |
 | `stacked_bar(df, category)` | 堆积柱状图 | DataFrame | ax | 各层（自下而上） |
@@ -99,6 +104,23 @@ fig.tight_layout()
 fig = plt.figure(figsize=(7.2, 3.1)); s1, s2 = fig.subfigures(1, 2)
 pl.joint(x1, y1, s1); pl.joint(x2, y2, s2)
 ```
+
+## 实验结果评估工具（stats / loaders / figsize）
+
+```python
+df = pl.read_jsonl("results/*_full.jsonl")                 # 一次读多个模型的结果（文件 / 通配符 / 文件夹）
+m  = pl.stats.binary_metrics(y_true, y_pred)               # Acc/Prec/Rec/Spec/F1/BalAcc/MCC + 95% CI（Wilson / bootstrap）
+base = pl.stats.majority_baseline(y_true)                  # 多数类基线：准确率低于它说明模型不如瞎猜
+cm = pl.stats.confusion_table(y_true, y_pred)              # 混淆矩阵 DataFrame
+pl.stats.mcnemar_test(correct_a, correct_b)                # 两个模型同一批样本的配对检验
+pl.stats.format_ci(0.656, 0.637, 0.675)                    # "65.6 [63.7, 67.5]"，直接进论文表格
+
+pl.rate_bar(df, by="gt_type", value="correct", baseline=base)
+pl.confusion_heatmap(cm)
+fig, ax = plt.subplots(figsize=pl.figsize("single", 0.75)) # 按期刊栏宽："single" 89mm / "1.5" 120mm / "double" 183mm
+```
+
+完整示例见 `notebooks/meme_detection_viz.ipynb`。
 
 ## 主题（整篇论文配色统一）
 

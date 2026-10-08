@@ -5,3 +5,4 @@ matplotlib>=3.6
 seaborn
 # 山脊图（pl.ridgeline）才需要；注意 joypy 目前与 pandas>=3 不兼容，需 pandas<3
 joypy
+jinja2

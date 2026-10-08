@@ -60,6 +60,7 @@ DEFAULTS = {
     "box":         PALETTES["teal6"],                   # 各分组
     "bar":         PALETTES["vivid3"],                  # 各分组
     "grouped_bar": PALETTES["vivid3"],                  # 各系列
+    "rate_bar":    PALETTES["vivid3"],                  # 各组（有 hue 时为各 hue）
     "radar":       PALETTES["teal6"],                   # 各模型
     "radar_ring":  PALETTES["ring6"],                   # 外圈色块（各指标）
     "stacked_bar": PALETTES["red_blue4"],               # 各层（自下而上）
@@ -69,6 +70,7 @@ DEFAULTS = {
 DEFAULT_CMAPS = {
     "corr_heatmap": "blue_red",
     "q_heatmap": "q_heat",
+    "confusion_heatmap": "Blues",
     "hexbin": "Blues",
     "ridgeline": "autumn",
 }

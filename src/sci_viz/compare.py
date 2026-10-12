@@ -225,7 +225,7 @@ def rate_bar(data, ax=None, *, by=None, value=None, hue=None, order=None, hue_or
             err = [[val - lo], [hi - val]]
             lab = (str(h) if gi == 0 else None) if "hue" in tab else None
             if horizontal:
-                ax.barh(pos, val, height=w * 0.92, color=c, alpha=0.5, edgecolor=c, linewidth=2, zorder=2, label=lab)
+                ax.barh(pos, val, height=w * 0.92, color=c, alpha=0.85, linewidth=2, zorder=2, label=lab)
                 ax.errorbar(val, pos, xerr=err, fmt="none", ecolor="black", capsize=3, elinewidth=1.1, zorder=4)
                 if show_values:
                     ax.text(hi + pad, pos, f"{val:.1f}", va="center", ha="left", fontsize=7)
